@@ -15,18 +15,23 @@ try:
 	f = file(sys.argv[2], 'r')
 	f = f.read()
 	doc=json.loads(f)
-	now=defineDate(doc[len(doc)-1]["pub_date"])-timedelta(days=1)
-	doc=[]
+	now=date.today()
+	for r in range(0, len(doc)):
+		if defineDate(doc[r]["pub_date"])<now:
+			now=defineDate(doc[r]["pub_date"])
+	now=now-timedelta(days=1)
 except:
 	doc=[]
 	now=date.today()
+print now
 apis=[
 	"fbf0a8d4d2ee7a1da3cc16ae1fc34241:3:64789311",
-	"4cb36df77426d67fb3f61601644e49ca:17:64789311"
+	"4cb36df77426d67fb3f61601644e49ca:17:64789311",
+	"069fd36ebeeba1b3ce313bc31a75f366:15:64789311"
 	]
 url="http://api.nytimes.com/svc/search/v2/articlesearch.json?sort=newest&fl=headline%2Cpub_date&api-key=<sample-key>&page=<page>&fq=source:(%22The%20New%20York%20Times%22),document_type:(%22article%22)&begin_date=<_b_>&end_date=<_e_>"
 out = file(output, 'w')
-i = cycle(range(2))
+i = cycle(range(3))
 end=date(2011,12,31)
 currentLen=len(doc)
 
@@ -48,13 +53,13 @@ def query(e,b,offset):
 
 while end<now:
 	e=stringify(now)
-	b=stringify(now-timedelta(days=1))
+	b=stringify(now-timedelta(days=0))
 	offset=0
 	hits=100000000
 	lenB=len(doc)
 	while hits>(offset*10):
 		(currentLen,offset,hits)=query(e,b,offset)
-	now=now-timedelta(days=2)
+	now=now-timedelta(days=1)
 	print "Got "+str(len(doc)-lenB)+" documents for "+b+" to "+e+". "+str(len(doc))+" docs in total."
 	out.seek(0,0)
 	out.write(json.dumps(doc))
