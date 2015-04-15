@@ -32,7 +32,7 @@ apis=[
 url="http://api.nytimes.com/svc/search/v2/articlesearch.json?sort=newest&fl=headline%2Cpub_date&api-key=<sample-key>&page=<page>&fq=source:(%22The%20New%20York%20Times%22),document_type:(%22article%22)&begin_date=<_b_>&end_date=<_e_>"
 out = file(output, 'w')
 i = cycle(range(3))
-end=date(2011,12,31)
+end=date(2005,12,31)
 currentLen=len(doc)
 
 def stringify(d):
